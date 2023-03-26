@@ -18,6 +18,8 @@ from util import raiseNotDefined
 import random
 import busters
 
+from util import manhattanDistance, raiseNotDefined
+
 def normalize(self):
     """
     Normalize the distribution such that the total value of all keys sums
@@ -40,8 +42,12 @@ def normalize(self):
     >>> empty
     {}
     """
-    "*** YOUR CODE HERE ***"
-    raiseNotDefined()
+    if self.total() == 0:
+        return
+    total = float(self.total())
+    for i in self:
+        self[i] = self[i] / total
+    
 
 def sample(self):
     """
@@ -65,7 +71,12 @@ def sample(self):
     0.0
     """
     "*** YOUR CODE HERE ***"
-    raiseNotDefined()
+    keys = []
+    weights = []
+    for key, weight in self.items():
+        keys.append(key)
+        weights.append(weight)
+    return random.choice(keys, p=weights)
 
 
 def getObservationProb(self, noisyDistance, pacmanPosition, ghostPosition, jailPosition):
@@ -73,7 +84,14 @@ def getObservationProb(self, noisyDistance, pacmanPosition, ghostPosition, jailP
     Return the probability P(noisyDistance | pacmanPosition, ghostPosition).
     """
     "*** YOUR CODE HERE ***"
-    raiseNotDefined()
+    if ghostPosition == jailPosition:
+        if noisyDistance != None:
+            return 0
+        else:
+            return 1
+    if noisyDistance == None:
+            return 0 
+    return busters.getObservationProbability(noisyDistance, manhattanDistance(pacmanPosition, ghostPosition))
 
 
 
